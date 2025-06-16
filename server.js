@@ -4,10 +4,14 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: true, // Allow all origins for now
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // MongoDB Connection
@@ -135,9 +139,13 @@ app.get("/api/users", async (req, res) => {
 
 // Health check
 app.get("/api/health", (req, res) => {
-  res.json({ status: "OK", message: "Server is running" });
+  res.json({ status: "OK", message: "Server is running on Vercel" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Root route
+app.get("/", (req, res) => {
+  res.json({ message: "Norton Backend API is running on Vercel!" });
 });
+
+// For Vercel, export the app
+module.exports = app;
